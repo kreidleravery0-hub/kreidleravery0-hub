@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Literacy Study Guide</title>
+<style>
+  :root {
+    --bg: #fffdf7;
+    --text: #1a1a1a;
+    --muted: #444;
+    --primary: #1d3fbb;
+    --primary-text: #ffffff;
+    --accent: #ffcf33;
+    --card: #ffffff;
+    --border: #1a1a1a;
+    --key-bg: #fff3c4;
+    --warn-bg: #ffe3e0;
+    --warn-border: #b3261e;
+    --link: #1d3fbb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121417;
+      --text: #f1f1f1;
+      --muted: #c9c9c9;
+      --primary: #8fb0ff;
+      --primary-text: #0b0d12;
+      --accent: #ffcf33;
+      --card: #1c1f24;
+      --border: #f1f1f1;
+      --key-bg: #3a3212;
+      --warn-bg: #3d1b18;
+      --warn-border: #ff8a80;
+      --link: #9dbaff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  a { color: var(--link); text-underline-offset: 0.15em; }
+  a:focus-visible, summary:focus-visible, .table-wrap:focus-visible {
+    outline: 3px solid var(--text);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--accent);
+  }
+  .skip {
+    position: absolute; left: -999px; top: 0;
+    background: var(--accent); color: #000; padding: 0.5rem 1rem; font-weight: 700;
+  }
+  .skip:focus { left: 0; z-index: 10; }
+
+  header.site {
+    background: var(--primary);
+    color: var(--primary-text);
+    padding: 2rem 1rem 1.5rem;
+    border-bottom: 6px solid var(--accent);
+  }
+  header.site h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.2; }
+  header.site p { margin: 0.5rem 0 0; max-width: 60ch; }
+
+  nav.toc {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--text);
+    border-bottom: 3px solid var(--accent);
+  }
+  nav.toc ul {
+    list-style: none; margin: 0 auto; padding: 0 0.5rem;
+    max-width: 72rem;
+    display: flex; gap: 0.25rem; overflow-x: auto;
+  }
+  nav.toc a {
+    display: block; white-space: nowrap;
+    padding: 0.75rem 0.75rem;
+    color: var(--bg); text-decoration: none; font-weight: 700; font-size: 1rem;
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { background: var(--accent); color: #000; }
+  nav.toc a:focus-visible { outline-color: #000; outline-offset: -3px; box-shadow: none; }
+
+  main { max-width: 72rem; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  section { margin-top: 2.5rem; }
+  h2 {
+    font-size: 1.7rem; line-height: 1.25; margin: 0 0 1rem;
+    padding-left: 0.75rem; border-left: 8px solid var(--primary);
+  }
+  h3 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; }
+  p, li { max-width: 75ch; }
+  ul, ol { padding-left: 1.4rem; }
+  li { margin-bottom: 0.35rem; }
+
+  .priority {
+    background: var(--key-bg);
+    border: 3px solid var(--border);
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+  }
+  .priority h2 { border-left-color: var(--accent); }
+  .priority ol { margin: 0; }
+
+  .grid {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+  .card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+  }
+  .card h3 { margin-top: 0; }
+
+  .key {
+    background: var(--key-bg);
+    border-left: 6px solid var(--accent);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    max-width: 75ch;
+  }
+  .warn {
+    background: var(--warn-bg);
+    border-left: 6px solid var(--warn-border);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    max-width: 75ch;
+  }
+  .key strong:first-child, .warn strong:first-child { display: block; }
+
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; background: var(--card); }
+  table.wide { min-width: 32rem; }
+  th, td { border: 2px solid var(--border); padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+  th { background: var(--primary); color: var(--primary-text); }
+
+  dl.glossary { display: grid; grid-template-columns: minmax(9rem, 14rem) 1fr; gap: 0; border-top: 2px solid var(--border); }
+  dl.glossary dt, dl.glossary dd { margin: 0; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--muted); }
+  dl.glossary dt { font-weight: 700; }
+
+  details {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    margin: 0.6rem 0;
+    max-width: 75ch;
+  }
+  summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 700; }
+  details[open] summary { border-bottom: 2px solid var(--border); }
+  details > div { padding: 0.5rem 1rem 0.75rem; }
+
+  footer { border-top: 3px solid var(--accent); padding: 1.5rem 1rem; text-align: center; color: var(--muted); font-size: 1rem; }
+
+  @media (max-width: 40rem) {
+    body { font-size: 1.0625rem; }
+    dl.glossary { grid-template-columns: 1fr; }
+    dl.glossary dt { border-bottom: none; padding-bottom: 0; }
+  }
+  @media print {
+    nav.toc, .skip { display: none; }
+    header.site { background: none; color: #000; border-bottom: 3px solid #000; }
+    details { border: 1px solid #000; }
+    th { background: none; color: #000; }
+    details::details-content { content-visibility: visible; display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <h1>AI Literacy Study Guide</h1>
+  <p>A general-purpose guide to the core ideas of an introductory AI literacy course: what AI is, how it works, where it fails, and how to use it responsibly.</p>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <ul>
+    <li><a href="#priorities">Start here</a></li>
+    <li><a href="#what">What AI is</a></li>
+    <li><a href="#how">How it learns</a></li>
+    <li><a href="#llms">How LLMs work</a></li>
+    <li><a href="#limits">Limitations</a></li>
+    <li><a href="#ethics">Ethics &amp; society</a></li>
+    <li><a href="#use">Using AI well</a></li>
+    <li><a href="#history">Timeline</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+    <li><a href="#quiz">Self-test</a></li>
+  </ul>
+</nav>
+
+<main id="main" tabindex="-1">
+
+  <section id="priorities" class="priority" aria-labelledby="priorities-h">
+    <h2 id="priorities-h">Start here: the 8 ideas most likely to be tested</h2>
+    <ol>
+      <li><strong>AI ⊃ Machine learning ⊃ Deep learning</strong>, which powers most generative AI and all LLMs. Know the nesting and one example of each. <a href="#what">Review</a></li>
+      <li><strong>Models learn patterns from data</strong>; they are not programmed rule by rule. Training data shapes everything a model does. <a href="#how">Review</a></li>
+      <li><strong>LLMs predict the next token.</strong> Fluent text is not proof of understanding or truth. <a href="#llms">Review</a></li>
+      <li><strong>Hallucinations</strong>: confident, plausible, false output — including fake citations. Always verify. <a href="#limits">Review</a></li>
+      <li><strong>Bias in → bias out.</strong> Skewed or unrepresentative data produces unfair results. <a href="#ethics">Review</a></li>
+      <li><strong>Privacy &amp; data:</strong> what you type into an AI tool may be stored or used; don't share sensitive information. <a href="#ethics">Review</a></li>
+      <li><strong>Human judgment and accountability</strong> stay with people, not the tool. <a href="#use">Review</a></li>
+      <li><strong>Academic integrity:</strong> follow your course's AI policy and disclose or cite AI use. <a href="#use">Review</a></li>
+    </ol>
+  </section>
+
+  <section id="what" aria-labelledby="what-h">
+    <h2 id="what-h">1. What AI is (and isn't)</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Artificial intelligence (AI)</h3>
+        <p>The broad field of building computer systems that perform tasks normally associated with human intelligence: recognizing images and speech, understanding language, making predictions, and making decisions.</p>
+      </div>
+      <div class="card">
+        <h3>Machine learning (ML)</h3>
+        <p>A subset of AI where systems <em>learn patterns from data</em> instead of following hand-written rules. Example: a spam filter trained on labeled emails.</p>
+      </div>
+      <div class="card">
+        <h3>Deep learning</h3>
+        <p>A subset of ML using <em>neural networks</em> with many layers. Powers modern image recognition, speech recognition, and language models.</p>
+      </div>
+      <div class="card">
+        <h3>Generative AI</h3>
+        <p>AI that <em>creates new content</em> — text, images, audio, video, code — based on patterns in its training data. Examples: chatbots, image generators.</p>
+      </div>
+    </div>
+
+    <h3>Narrow AI vs. general AI</h3>
+    <ul>
+      <li><strong>Narrow (weak) AI:</strong> built for specific tasks (translation, recommendations, face unlock). <strong>AI in use today is not general.</strong> General-purpose models like LLMs handle many tasks, but they are still not AGI.</li>
+      <li><strong>Artificial general intelligence (AGI):</strong> a hypothetical system able to learn and perform any intellectual task a human can. It does not currently exist.</li>
+    </ul>
+
+    <h3>Predictive vs. generative AI</h3>
+    <ul>
+      <li><strong>Predictive / discriminative:</strong> classifies or forecasts (Is this email spam? Will this loan default?).</li>
+      <li><strong>Generative:</strong> produces new output (write an essay, draw a picture).</li>
+    </ul>
+
+    <div class="key"><strong>Remember</strong>AI you already use: search ranking, streaming and shopping recommendations, social media feeds, spam filters, voice assistants, autocorrect, navigation apps, and face unlock.</div>
+  </section>
+
+  <section id="how" aria-labelledby="how-h">
+    <h2 id="how-h">2. How machines learn</h2>
+    <h3>The basic pipeline</h3>
+    <ol>
+      <li><strong>Data:</strong> collect examples (text, images, numbers). Quality and representativeness matter more than almost anything else.</li>
+      <li><strong>Training:</strong> an algorithm adjusts the model's internal numbers (<em>parameters</em> or <em>weights</em>) to reduce its errors on the examples.</li>
+      <li><strong>Model:</strong> the trained result — a mathematical function that maps inputs to outputs.</li>
+      <li><strong>Testing / evaluation:</strong> measure performance on data the model has <em>not</em> seen.</li>
+      <li><strong>Inference:</strong> using the trained model on new inputs (e.g., you asking a chatbot a question).</li>
+    </ol>
+
+    <h3>Three main types of machine learning</h3>
+    <div class="table-wrap" role="region" aria-label="Types of machine learning" tabindex="0">
+      <table class="wide">
+        <thead><tr><th scope="col">Type</th><th scope="col">How it learns</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Supervised</th><td>From <strong>labeled</strong> examples (input + correct answer)</td><td>Photos labeled "cat"/"dog"; spam vs. not spam</td></tr>
+          <tr><th scope="row">Unsupervised</th><td>Finds structure in <strong>unlabeled</strong> data</td><td>Grouping customers by shopping habits (clustering)</td></tr>
+          <tr><th scope="row">Reinforcement</th><td>Trial and error with <strong>rewards and penalties</strong></td><td>Game-playing AI; robot control; tuning chatbot behavior</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Neural networks in one paragraph</h3>
+    <p>Loosely inspired by the brain, a neural network is layers of simple connected units ("neurons"). Each connection has a weight. Input flows through the layers to produce an output; during training, the weights are nudged to make outputs closer to the correct answers. Modern models have millions to hundreds of billions or more of these weights.</p>
+
+    <div class="warn"><strong>Common misconception</strong>"The AI was programmed to say that." Usually no one wrote that specific response — the behavior emerged from patterns in training data and the training process. This is also why AI decisions can be hard to explain (the <a href="#accountability"><em>black box</em> problem</a>).</div>
+
+    <h3>Overfitting</h3>
+    <p>When a model memorizes its training data instead of learning general patterns, it does well on training examples but poorly on new data. This is why models are tested on held-out data.</p>
+  </section>
+
+  <section id="llms" aria-labelledby="llms-h">
+    <h2 id="llms-h">3. How large language models (LLMs) work</h2>
+    <p>Chatbots such as ChatGPT, Claude, Gemini, and Copilot are built on LLMs.</p>
+    <ol>
+      <li><strong>Tokens:</strong> text is split into small chunks (words or pieces of words). Models read and write tokens, not letters or ideas.</li>
+      <li><strong>Pretraining:</strong> the model reads a huge amount of text and learns to <strong>predict the next token</strong>. From this it picks up grammar, facts, styles, and patterns of reasoning — and also errors and biases in that text.</li>
+      <li><strong>Fine-tuning and human feedback:</strong> the model is further trained to follow instructions and be helpful and safe, often using human ratings of responses (<em>reinforcement learning from human feedback</em>, RLHF).</li>
+      <li><strong>Generating a response:</strong> the model produces one token at a time, each chosen based on probabilities given everything before it. Some randomness (<em>temperature</em>) means the same prompt can give different answers.</li>
+    </ol>
+
+    <div class="key"><strong>Key idea</strong>An LLM generates the <em>most plausible-sounding</em> continuation, not a checked fact. It has no built-in way to know whether what it says is true.</div>
+
+    <h3>Terms to know</h3>
+    <ul>
+      <li><strong>Transformer:</strong> the neural network architecture behind modern LLMs (introduced 2017). Its "attention" mechanism lets the model weigh how words relate across a passage.</li>
+      <li><strong>Prompt:</strong> the input or instructions you give the model.</li>
+      <li><strong>Context window:</strong> how much text (in tokens) the model can consider at once. Content beyond it is not "remembered."</li>
+      <li><strong>Training cutoff:</strong> the model's knowledge stops at the date its training data ends, unless it is connected to search or other tools.</li>
+      <li><strong>Multimodal:</strong> models that handle more than text — images, audio, video.</li>
+    </ul>
+
+    <h3>Grounding, tools, and agents</h3>
+    <ul>
+      <li><strong>Grounding / retrieval-augmented generation (RAG):</strong> the model searches the web or a set of documents and uses the results in its answer. This reduces, but does not eliminate, hallucinations — it can still misread or misquote sources.</li>
+      <li><strong>Tool use and AI agents:</strong> models connected to tools can browse, run code, edit files, or take actions (send email, make purchases) over multiple steps. Mistakes can now have real effects, so human review matters more.</li>
+    </ul>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <h2 id="limits-h">4. Limitations and risks of AI output</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Hallucinations</h3>
+        <p>Confident but false or made-up output: wrong facts, invented quotes, <strong>fake sources and citations</strong>, nonexistent court cases or studies.</p>
+      </div>
+      <div class="card">
+        <h3>Bias</h3>
+        <p>Models reproduce stereotypes and gaps in their training data. <a href="#ethics">More in Ethics</a>.</p>
+      </div>
+      <div class="card">
+        <h3>Outdated knowledge</h3>
+        <p>Without live search, a model doesn't know events after its training cutoff and may not say so.</p>
+      </div>
+      <div class="card">
+        <h3>Inconsistency</h3>
+        <p>The same question can get different answers; small wording changes can change results.</p>
+      </div>
+      <div class="card">
+        <h3>Reasoning and math errors</h3>
+        <p>Models can make logic, counting, and arithmetic mistakes while sounding certain.</p>
+      </div>
+      <div class="card">
+        <h3>Sycophancy</h3>
+        <p>A tendency to agree with the user or tell them what they want to hear, even when the user is wrong.</p>
+      </div>
+    </div>
+    <div class="warn"><strong>Exam trap</strong>Sounding confident, fluent, or detailed is <em>not</em> evidence that an AI answer is correct.</div>
+  </section>
+
+  <section id="ethics" aria-labelledby="ethics-h">
+    <h2 id="ethics-h">5. Ethics and societal impact</h2>
+
+    <h3>Bias and fairness</h3>
+    <p>If training data is skewed, AI can discriminate — for example, in hiring, lending, policing, or healthcare. Facial analysis systems have been shown to be less accurate for some demographic groups, especially darker-skinned women (Gender Shades study, Buolamwini &amp; Gebru, 2018). Fairness requires diverse data, testing across groups, and human oversight.</p>
+
+    <h3>Privacy and data</h3>
+    <ul>
+      <li>AI is trained on massive data sets, which may include personal information collected without clear consent.</li>
+      <li>Prompts you enter may be stored, reviewed, or used to train future models, depending on the service's settings and policies.</li>
+      <li>Don't enter passwords, financial details, health information, or other people's private data.</li>
+    </ul>
+
+    <h3>Misinformation and deepfakes</h3>
+    <p>Generative AI makes it cheap to produce realistic fake text, images, audio, and video. Deepfakes can be used for scams, impersonation, harassment, and political manipulation.</p>
+
+    <h3>Copyright and intellectual property</h3>
+    <p>Many models were trained on copyrighted work without permission, leading to lawsuits from authors, artists, and news organizations. Who owns AI-generated content is also unsettled; in the U.S., the Copyright Office has said works need human authorship to be protected.</p>
+
+    <h3 id="accountability">Transparency, explainability, and accountability</h3>
+    <ul>
+      <li><strong>Black box:</strong> it is often hard to explain <em>why</em> a model gave a specific output.</li>
+      <li><strong>Accountability:</strong> when AI causes harm, responsibility lies with the people and organizations who build, deploy, and use it.</li>
+      <li><strong>Human in the loop:</strong> keeping people involved in high-stakes decisions.</li>
+    </ul>
+
+    <h3>Regulation and governance</h3>
+    <ul>
+      <li><strong>EU AI Act (adopted 2024):</strong> the first major comprehensive AI law. It sorts AI uses by risk level — banned (unacceptable risk), high-risk (strict requirements), limited-risk (transparency duties, e.g., disclosing chatbots and deepfakes), and minimal-risk.</li>
+      <li><strong>United States:</strong> no single comprehensive federal AI law; rules come from a mix of existing laws, state laws, and agency guidance.</li>
+      <li><strong>Institutions:</strong> schools and employers set their own AI-use policies.</li>
+    </ul>
+
+    <h3>Work, environment, and access</h3>
+    <ul>
+      <li><strong>Jobs:</strong> AI automates some tasks, changes many jobs, and creates new ones; effects are uneven across fields.</li>
+      <li><strong>Environment:</strong> training and running large models use significant electricity and water for data centers.</li>
+      <li><strong>Digital divide:</strong> unequal access to AI tools and skills can widen existing inequalities.</li>
+      <li><strong>Hidden labor:</strong> much AI depends on human workers who label data and review harmful content, often for low pay.</li>
+    </ul>
+  </section>
+
+  <section id="use" aria-labelledby="use-h">
+    <h2 id="use-h">6. Using AI effectively and responsibly</h2>
+
+    <h3>Writing good prompts</h3>
+    <ul>
+      <li><strong>Be specific:</strong> state the task, audience, length, and format.</li>
+      <li><strong>Give context:</strong> include background or examples of what you want.</li>
+      <li><strong>Assign a role</strong> when helpful ("Act as a tutor quizzing me on…").</li>
+      <li><strong>Iterate:</strong> refine and follow up; treat it as a conversation.</li>
+      <li><strong>Ask for reasoning or sources</strong> — then check them.</li>
+    </ul>
+
+    <h3>Verifying AI output</h3>
+    <ol>
+      <li>Check claims against reliable sources (library databases, official sites, reputable news, textbooks).</li>
+      <li>Confirm every citation actually exists and says what the AI claims.</li>
+      <li>Use <strong>lateral reading</strong>: open new tabs to see what other trusted sources say.</li>
+      <li>Be extra careful with numbers, dates, quotes, medical, legal, and financial information.</li>
+    </ol>
+
+    <h3>Academic integrity</h3>
+    <ul>
+      <li>Follow the AI policy for <strong>each course and assignment</strong>; policies differ.</li>
+      <li>Disclose how you used AI when required, and cite it in the style your instructor requires (APA, MLA, and Chicago all publish guidance for citing generative AI).</li>
+      <li>You are responsible for everything you submit, including AI errors.</li>
+      <li><strong>AI detectors are unreliable.</strong> They produce false positives (flagging human writing as AI), especially for non-native English writers, and can be fooled. Keep drafts and notes to show your process.</li>
+      <li>Good uses usually include brainstorming, explaining concepts, quizzing yourself, and feedback on your own drafts. Submitting AI-written work as your own is typically not allowed.</li>
+    </ul>
+
+    <div class="key"><strong>Rule of thumb</strong>Use AI as an assistant, not an authority: you make the decisions and verify the facts.</div>
+  </section>
+
+  <section id="history" aria-labelledby="history-h">
+    <h2 id="history-h">7. Key milestones</h2>
+    <div class="table-wrap" role="region" aria-label="AI timeline" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Year</th><th scope="col">Milestone</th></tr></thead>
+        <tbody>
+          <tr><td>1950</td><td>Alan Turing proposes the "imitation game," later called the <strong>Turing test</strong>.</td></tr>
+          <tr><td>1956</td><td><strong>Dartmouth workshop</strong> launches AI as a field. The term "artificial intelligence" comes from its 1955 proposal (McCarthy, Minsky, Rochester, Shannon).</td></tr>
+          <tr><td>Mid-1970s; late 1980s–early 1990s</td><td>"<strong>AI winters</strong>": periods of reduced funding after hype outpaced results.</td></tr>
+          <tr><td>1997</td><td>IBM's <strong>Deep Blue</strong> defeats chess champion Garry Kasparov.</td></tr>
+          <tr><td>2012</td><td><strong>AlexNet</strong> wins the ImageNet image recognition challenge, launching the deep learning boom.</td></tr>
+          <tr><td>2016</td><td>DeepMind's <strong>AlphaGo</strong> defeats Go champion Lee Sedol.</td></tr>
+          <tr><td>2017</td><td>The <strong>Transformer</strong> architecture is introduced ("Attention Is All You Need").</td></tr>
+          <tr><td>2022</td><td>OpenAI releases <strong>ChatGPT</strong> (November), bringing generative AI to the mainstream.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="glossary" aria-labelledby="glossary-h">
+    <h2 id="glossary-h">8. Glossary</h2>
+    <dl class="glossary">
+      <dt>AGI</dt><dd>Artificial general intelligence: hypothetical AI with human-level ability across any task.</dd>
+      <dt>AI agent</dt><dd>An AI system that uses tools and takes multi-step actions toward a goal.</dd>
+      <dt>Algorithm</dt><dd>A set of step-by-step instructions for solving a problem or doing a task.</dd>
+      <dt>Bias (algorithmic)</dt><dd>Systematic, unfair outcomes from an AI system, often caused by its data or design.</dd>
+      <dt>Chatbot</dt><dd>A program that converses with users in natural language.</dd>
+      <dt>Context window</dt><dd>The maximum amount of text a model can take into account at once.</dd>
+      <dt>Deep learning</dt><dd>Machine learning using neural networks with many layers.</dd>
+      <dt>Deepfake</dt><dd>AI-generated or altered media that realistically imitates a real person.</dd>
+      <dt>Fine-tuning</dt><dd>Additional training of a pretrained model on specific data or tasks.</dd>
+      <dt>Generative AI</dt><dd>AI that creates new content such as text, images, audio, or code.</dd>
+      <dt>Hallucination</dt><dd>Confident AI output that is false or fabricated.</dd>
+      <dt>Inference</dt><dd>Using a trained model to produce outputs from new inputs.</dd>
+      <dt>LLM</dt><dd>Large language model: a model trained on vast text to predict and generate language.</dd>
+      <dt>Machine learning (ML)</dt><dd>AI that learns patterns from data instead of following hand-written rules.</dd>
+      <dt>Natural language processing (NLP)</dt><dd>The AI field focused on understanding and generating human language.</dd>
+      <dt>Neural network</dt><dd>Layers of connected units with adjustable weights that learn from data.</dd>
+      <dt>Overfitting</dt><dd>When a model memorizes training data and performs poorly on new data.</dd>
+      <dt>Parameters (weights)</dt><dd>The internal numbers a model adjusts during training.</dd>
+      <dt>Prompt</dt><dd>The input or instructions given to an AI model.</dd>
+      <dt>RAG</dt><dd>Retrieval-augmented generation: the model looks up documents or search results and uses them in its answer.</dd>
+      <dt>RLHF</dt><dd>Reinforcement learning from human feedback: training a model using human ratings of its responses.</dd>
+      <dt>Supervised learning</dt><dd>Learning from labeled examples that include the correct answer.</dd>
+      <dt>Temperature</dt><dd>A setting controlling how random a model's word choices are; higher means more varied output.</dd>
+      <dt>Token</dt><dd>A chunk of text (word or word piece) that a language model processes.</dd>
+      <dt>Training cutoff</dt><dd>The date after which a model's training data ends.</dd>
+      <dt>Training data</dt><dd>The examples a model learns from.</dd>
+      <dt>Transformer</dt><dd>The neural network architecture behind modern LLMs, based on "attention."</dd>
+      <dt>Unsupervised learning</dt><dd>Finding patterns in data that has no labels.</dd>
+    </dl>
+  </section>
+
+  <section id="quiz" aria-labelledby="quiz-h">
+    <h2 id="quiz-h">9. Self-test</h2>
+    <p>Answer out loud or on paper first, then open each question to check.</p>
+
+    <details><summary>What is the relationship between AI, machine learning, and deep learning?</summary>
+      <div><p>They are nested: deep learning is a type of machine learning, which is a type of AI. Most generative AI, and all LLMs, are built with deep learning.</p></div></details>
+
+    <details><summary>What is the difference between supervised and unsupervised learning?</summary>
+      <div><p>Supervised learning uses labeled examples with correct answers; unsupervised learning finds patterns in unlabeled data.</p></div></details>
+
+    <details><summary>At its core, what task is an LLM trained to do?</summary>
+      <div><p>Predict the next token in a sequence of text.</p></div></details>
+
+    <details><summary>What is a hallucination, and why does it happen?</summary>
+      <div><p>Confident output that is false or made up. It happens because LLMs generate plausible-sounding text from patterns rather than looking up verified facts.</p></div></details>
+
+    <details><summary>Give two ways bias can enter an AI system.</summary>
+      <div><p>Unrepresentative or historically biased training data; design choices such as what the model optimizes for or how labels were assigned; lack of testing across different groups.</p></div></details>
+
+    <details><summary>Why might a chatbot give wrong answers about recent events?</summary>
+      <div><p>Its knowledge stops at its training cutoff unless it is connected to live search.</p></div></details>
+
+    <details><summary>Is today's AI "narrow" or "general"?</summary>
+      <div><p>Narrow (not general). General-purpose models like LLMs handle many tasks, but AGI is hypothetical and does not currently exist.</p></div></details>
+
+    <details><summary>Name three steps for checking an AI-generated answer.</summary>
+      <div><p>Verify claims in reliable sources; confirm citations exist and say what is claimed; use lateral reading; be extra careful with numbers, quotes, and high-stakes topics.</p></div></details>
+
+    <details><summary>Why shouldn't an AI detector's result be treated as proof of cheating?</summary>
+      <div><p>Detectors are unreliable: they produce false positives, especially for non-native English writers, and can be fooled.</p></div></details>
+
+    <details><summary>What should you avoid typing into a public AI tool?</summary>
+      <div><p>Passwords, financial or health information, and other people's private or confidential data.</p></div></details>
+
+    <details><summary>Who is responsible when AI-generated content in your assignment is wrong?</summary>
+      <div><p>You are. The person who submits or acts on AI output is accountable for it.</p></div></details>
+  </section>
+
+</main>
+
+<footer>
+  <p>General AI literacy study guide. Always check your course syllabus and instructor for exact exam topics and AI policies.</p>
+</footer>
+</body>
+</html>
