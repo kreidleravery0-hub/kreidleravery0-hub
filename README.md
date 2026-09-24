@@ -1,8 +1,1 @@
-# kreidleravery0-hub
-# kreidleravery0-hub
-# kreidleravery0-hub
-# kreidleravery0-hub
-# kreidleravery0-hub
-# kreidleravery0-hub
-# kreidleravery0-hub
-# kreidleravery0-hub
+# kreidleravery0-hub - Website for AI Literacy class
